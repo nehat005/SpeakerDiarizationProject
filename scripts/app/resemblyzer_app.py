@@ -1,24 +1,21 @@
-from resemblyzer import preprocess_wav, VoiceEncoder
 import sys
 import os
-import_root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-sys.path.insert(0, import_root_path)
-from external.Resemblyzer.demo_utils import *
-# from pathlib import Path
 
-# DEMO 02: we'll show how this similarity measure can be used to perform speaker diarization
-# (telling who is speaking when in a recording).
+import_root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'external'))
+sys.path.insert(0, import_root_path)
+print(import_root_path)
+
+from Resemblyzer.demo_utils import *
+from Resemblyzer.resemblyzer import preprocess_wav, VoiceEncoder
 
 sampling_rate = 16000
-# Get reference audios
-# Load the interview audio from disk
-# Source for the interview: https://www.youtube.com/watch?v=X2zqiX6yL3I
-wav_fpath = "data/SyntheticVerbmobil/dialog_MEM_MBS_2.wav"
+
+wav_fpath = os.path.join('/home/tandon/SpeakerDiarizationProject/data/SyntheticVerbmobil/dialog_MEM_MBS_2.wav')
 wav = preprocess_wav(wav_fpath)
 
 # Cut some segments from single speakers as reference audio
 segments = [[0, 8.0], [9.9, 19.0]]
-speaker_names = ["MEM", "AFL"]
+speaker_names = ["MEM", "MBS"]
 speaker_wavs = [wav[int(s[0] * sampling_rate):int(s[1] * sampling_rate)] for s in segments]
 
 # Compare speaker embeds to the continuous embedding of the interview
@@ -32,7 +29,7 @@ speaker_wavs = [wav[int(s[0] * sampling_rate):int(s[1] * sampling_rate)] for s i
 
 encoder = VoiceEncoder("cpu")
 print("Running the continuous embedding on cpu, this might take a while...")
-_, cont_embeds, wav_splits = encoder.embed_utterance(wav, return_partials=True, rate=16)
+_, cont_embeds, wav_splits = encoder.embed_utterance(wav, return_partials=True)
 
 # Get the continuous similarity for every speaker. It amounts to a dot product between the
 # embedding of the speaker and the continuous embedding of the interview

@@ -1,2 +1,3 @@
-/external/
-/data/
+/external/*
+/data/*
+/experiments/*
