@@ -56,6 +56,15 @@ def run_pyannotate_inference(data_root_path, save_path):
                                save_file_path=os.path.join(save_path, 'relative_evaluation.txt'))
 
 
+def diarize(file):
+    from pyannote.audio import Pipeline
+    pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",
+                                        use_auth_token='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')
+
+    diarization = pipeline(file)
+    return diarization
+
+
 def main(args):
 
     parser = argparse.ArgumentParser(add_help=False)

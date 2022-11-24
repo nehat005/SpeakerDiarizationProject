@@ -3,10 +3,11 @@
 This script uses adapted code from resemblyzer's demo02_diarization.py script only for evaluation purpose.
 https://github.com/resemble-ai/Resemblyzer
 """
-
+import argparse
 import sys
 import os
 import glob
+import time
 
 import_root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'external'))
 eval_root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'scripts', 'evaluation'))
@@ -20,13 +21,24 @@ from Resemblyzer.resemblyzer import preprocess_wav, VoiceEncoder
 import der_evaluation
 
 sampling_rate = 16000
-data_root_path = '/home/tandon/Matlab_to_Python_Import/data/SyntheticVerbmobilData/Test/entire_test'
-save_path = '/home/tandon/SpeakerDiarizationProject/experiments/resemblyzer'
-
 encoder = VoiceEncoder("cpu")
 
 
-def main():
+def diarize(src_path, tgt_path):
+    """
+
+    Parameters
+    ----------
+    src_path
+    tgt_path
+
+    Returns
+    -------
+
+    """
+    data_root_path = src_path
+    save_path=tgt_path
+    inference_start_time = time.time()
     for file in glob.glob(data_root_path + '/*.wav'):
         filename = os.path.basename(file).split('.')[0]
         wav_fpath = file
@@ -96,7 +108,18 @@ def main():
                                hypothesis_rttm_scpf=os.path.join(save_path,
                                                                  'hyp_rttm.scpf'),
                                save_file_path=os.path.join(save_path, 'absolute_evaluation.txt'))
+    end_time = time.time()
+    print('Inference Time: ', (end_time - inference_start_time) / 60)
+
+
+def main(args):
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('--src', help='Source directory path containing wav files', required=False)
+    parser.add_argument('--tgt', help='Target directory path to store experiment results')
+
+    args = parser.parse_args(args)
+    diarize(args.src, args.tgt)
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
