@@ -19,8 +19,8 @@ def compute_der(reference_rttm_scpf: str, hypothesis_rttm_scpf: str, save_file_p
     This function computes der and other metrics with the score function from '/dscore/score.py' module.
     This code is in lines with the score.py main function
 
-    :param reference_rttm_scpf: path to the scpf storing all reference rttm file paths
-    :param hypothesis_rttm_scpf: path to the scpf storing all hypothesis rttm file paths
+    :param reference_rttm_scpf: path to the scp storing all reference rttm file paths
+    :param hypothesis_rttm_scpf: path to the scp storing all hypothesis rttm file paths
     :param save_file_path: path to the file to store all evaluation metrics
     :param step: default value = 0.10 (refer /dscore/score.py)
     :return: None
